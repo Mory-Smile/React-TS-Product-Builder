@@ -1,19 +1,20 @@
-import { useState } from "react";
-import "./App.css";
+import { productList } from "./components/data";
+import ProductCard from "./components/ProductCard";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  const handleCount = () => {
-    setCount((count) => count + 1);
+  // ** Renders
+  const renderProductList = () => {
+    return productList.map((product) => (
+      <ProductCard key={product.id} product={product} />
+    ));
   };
-
   return (
     <>
-      <div>
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
-        <button onClick={handleCount}>{count}</button>
-      </div>
+      <main className="container mx-auto">
+        <div className="m-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 p-2 rounded-md">
+          {renderProductList()}
+        </div>
+      </main>
     </>
   );
 }
