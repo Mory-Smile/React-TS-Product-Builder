@@ -48,21 +48,23 @@ function App() {
 
         <Modal isOpen={isOpen} closeModal={closeModal}>
           <h1 className="text-center font-medium pb-5">ADD A NEW PRODUCT</h1>
-          <div className="pb-7">{renderFormInputList}</div>
-          <div className="flex items-center space-x-3">
-            <Button
-              className="bg-indigo-700 hover:bg-indigo-800 transition-colors text-white"
-              onClick={() => console.log("Product Added")}
-            >
-              Submit
-            </Button>
-            <Button
-              className="bg-red-600 hover:bg-red-700 transition-colors text-white"
-              onClick={closeModal}
-            >
-              Cancel
-            </Button>
-          </div>
+          <form>
+            <div className="pb-7">{renderFormInputList}</div>
+            <div className="flex items-center space-x-3">
+              <Button
+                className="bg-indigo-700 hover:bg-indigo-800 transition-colors text-white"
+                onClick={() => console.log("Product Added")}
+              >
+                Submit
+              </Button>
+              <Button
+                className="bg-red-600 hover:bg-red-700 transition-colors text-white"
+                onClick={closeModal}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
         </Modal>
       </main>
     </>
