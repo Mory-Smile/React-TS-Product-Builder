@@ -1,23 +1,25 @@
 import Modal from "./components/ui/Modal";
 import { productList, formInputsList } from "./components/data";
 import ProductCard from "./components/ProductCard";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import Button from "./components/ui/Button";
-import Input from "./components/ui/input";
+import Input from "./components/ui/Input";
 import { ChangeEvent } from "react";
 import { IProduct } from "./components/interfaces";
+import { productValidation } from "./Validation";
 
 function App() {
-  // ** States
-  const [isOpen, setIsOpen] = useState(false);
-  const [product, setProduct] = useState<IProduct>({
+  const defaultProductObj = {
     title: "",
     description: "",
     imageURL: "",
     price: "",
     colors: [],
     category: { name: "", imageURL: "" },
-  });
+  };
+  // ** States
+  const [isOpen, setIsOpen] = useState(false);
+  const [product, setProduct] = useState<IProduct>(defaultProductObj);
 
   // ** Handlers
   const closeModal = () => setIsOpen(false);
@@ -25,6 +27,25 @@ function App() {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setProduct({ ...product, [name]: value });
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+
+    const { title, description, imageURL, price } = product;
+
+    const errors = productValidation({
+      title,
+      description,
+      imageURL,
+      price,
+    });
+    console.log(product);
+  };
+
+  const onCancel = () => {
+    closeModal();
+    setProduct(defaultProductObj);
   };
   // ** Renders
   const renderProductList = () =>
@@ -62,7 +83,7 @@ function App() {
 
         <Modal isOpen={isOpen} closeModal={closeModal}>
           <h1 className="text-center font-medium pb-5">ADD A NEW PRODUCT</h1>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="pb-7">{renderFormInputList}</div>
             <div className="flex items-center space-x-3">
               <Button
@@ -73,7 +94,8 @@ function App() {
               </Button>
               <Button
                 className="bg-red-600 hover:bg-red-700 transition-colors text-white"
-                onClick={closeModal}
+                onClick={onCancel}
+                type="button"
               >
                 Cancel
               </Button>

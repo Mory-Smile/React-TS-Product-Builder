@@ -11,6 +11,7 @@ const Input = ({ ...rest }: IProps) => {
       <input
         className="border-2 rounded-md p-2 border-gray-300 shadow-md focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 px-3 py-3 text-md"
         {...rest}
+        required
       />
     </div>
   );
