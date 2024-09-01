@@ -1,20 +1,28 @@
-import { txtSlicer } from "../utils/functions";
-import Image from "./Image";
-import { IProduct } from "./interfaces";
-import Button from "./ui/Button";
-import CircleColor from "./CircleColor";
+import { txtSlicer } from "../../utils/functions";
+import Image from "../Image Component/Image";
+import { IProduct } from "../interfaces";
+import Button from "../ui/Button";
+import CircleColor from "../CircleColor/CircleColor";
 
 interface IProps {
   product: IProduct;
+  setProductToEdit: (product: IProduct) => void;
+  openEditModal: () => void;
 }
 
-const ProductCard = ({ product }: IProps) => {
+const ProductCard = ({ product, setProductToEdit, openEditModal }: IProps) => {
   const { title, description, imageURL, price, colors, category } = product;
 
   // ** RENDERS
   const renderProductColors = colors.map((color) => (
     <CircleColor key={color} color={color} />
   ));
+
+  // ** Handlers
+  const handleEdit = () => {
+    setProductToEdit(product);
+    openEditModal();
+  };
 
   return (
     <>
@@ -33,21 +41,17 @@ const ProductCard = ({ product }: IProps) => {
         </div>
 
         <div className="flex items-center justify-between">
-          <span>{price}</span>
+          <span className="text-lg">{`$${price}`}</span>
           <Image
-            imageURL={imageURL}
+            imageURL={category.imageURL}
             alt={category.name}
             className="w-10 h-10 rounded-full object-bottom"
           />
         </div>
 
         <div className="flex space-x-2 mt-5 text-white">
-          <Button
-            className="bg-indigo-700"
-            width="w-full"
-            onClick={() => console.log("Clicked")}
-          >
-            Edit ❌
+          <Button className="bg-gray-600" width="w-full" onClick={handleEdit}>
+            Edit
           </Button>
           <Button className="bg-red-700" onClick={() => console.log("Clicked")}>
             Delete
