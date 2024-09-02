@@ -53,7 +53,10 @@ const ProductCard = ({ product, setProductToEdit, openEditModal }: IProps) => {
           <Button className="bg-gray-600" width="w-full" onClick={handleEdit}>
             Edit
           </Button>
-          <Button className="bg-red-700" onClick={() => console.log("Clicked")}>
+          <Button
+            className="bg-red-700"
+            onClick={() => console.log("Delete Clicked")}
+          >
             Delete
           </Button>
         </div>

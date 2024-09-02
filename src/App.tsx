@@ -12,6 +12,7 @@ import { categories } from "./components/data";
 
 import { v4 as uuid } from "uuid";
 import Select from "./components/ui/Select";
+import { TProductNames } from "./types";
 
 function App() {
   const defaultProductObj = {
@@ -96,13 +97,13 @@ function App() {
   const handleEditSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    // setProducts((prev) => [
-    //   { ...product, id: uuid(), colors: tempColors, category: selected },
-    //   ...prev,
-    // ]);
-    closeModal();
     setProductToEdit(defaultProductObj);
     setTempColors([]);
+    closeModal();
+  };
+
+  const onCancleEdit = () => {
+    closeEditModal();
   };
 
   // ** Renders
@@ -143,6 +144,27 @@ function App() {
       }}
     />
   ));
+
+  const renderProductEdit = (
+    id: string,
+    label: string,
+    name: TProductNames
+  ) => {
+    return (
+      <div className="flex flex-col">
+        <label htmlFor={id} className="mb-[1px]">
+          {label}
+        </label>
+        <Input
+          id={id}
+          name={name}
+          type={"text"}
+          onChange={handleEditChange}
+          value={productToEdit[name]}
+        />
+      </div>
+    );
+  };
 
   return (
     <>
@@ -200,29 +222,14 @@ function App() {
         <Modal isOpen={isEditOpen} closeModal={closeEditModal}>
           <h1 className="text-center font-medium pb-5">Edit CURRENT PRODUCT</h1>
           <form onSubmit={handleEditSubmit}>
-            <div className="flex flex-col">
-              <label htmlFor={"title"} className="mb-[1px]"></label>
-              <Input
-                id={"title"}
-                name={"title"}
-                type={"text"}
-                onChange={handleEditChange}
-                value={productToEdit["title"]}
-              />
-            </div>
-
-            <div className="flex flex-col">
-              <label htmlFor={"description"} className="mb-[1px]">
-                Product Description
-              </label>
-              <Input
-                id={"description"}
-                name={"description"}
-                type={"text"}
-                onChange={handleEditChange}
-                value={productToEdit["description"]}
-              />
-            </div>
+            {renderProductEdit("title", "Product Title", "title")}
+            {renderProductEdit(
+              "description",
+              "Product Description",
+              "description"
+            )}
+            {renderProductEdit("imageURL", "Product Image URL", "imageURL")}
+            {renderProductEdit("price", "Product Price", "price")}
 
             {/* <Select selected={selected} setSelected={setSelected} />
 
@@ -263,7 +270,7 @@ function App() {
               </Button>
               <Button
                 className="bg-red-600 hover:bg-red-700 transition-colors text-white"
-                onClick={onCancel}
+                onClick={onCancleEdit}
                 type="button"
               >
                 Cancel
