@@ -10,7 +10,7 @@ export const productList: IProduct[] = [
     imageURL:
       "https://images.unsplash.com/photo-1583121274602-3e2820c69888?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8GVufDB8fHx8&auto=format&fit=corp&w=1170&q=80",
     price: "500000",
-    colors: ["#FF0032", "#2563eb", "#FF6E31"],
+    colors: ["#964B00", "#008000", "#8B8000"],
     category: {
       name: "Cars",
       imageURL:
@@ -26,7 +26,7 @@ export const productList: IProduct[] = [
     imageURL:
       "https://di-uploads-pod33.dealerinspire.com/loufuszchevy/uploads/2022/01/2022-Chevrolet-Spark-Special-Edition.png",
     price: "300000",
-    colors: ["#FF0032", "#2563eb", "#FF6E31"],
+    colors: ["#964B00", "#008000", "#8B8000"],
     category: {
       name: "Cars",
       imageURL:
@@ -41,7 +41,7 @@ export const productList: IProduct[] = [
     imageURL:
       "https://images.unsplash.com/photo-1523983388277-336a66bf9bcd?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     price: "450000",
-    colors: ["#FF0032", "#2563eb", "#FF6E31"],
+    colors: ["#964B00", "#008000", "#8B8000"],
     category: {
       name: "Cars",
       imageURL:
@@ -56,7 +56,7 @@ export const productList: IProduct[] = [
     imageURL:
       "https://images.unsplash.com/photo-1657021623841-c40377d3ce17?q=80&w=872&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     price: "600000",
-    colors: ["#FF0032", "#2563eb", "#FF6E31"],
+    colors: ["#964B00", "#008000", "#8B8000"],
     category: {
       name: "Cars",
       imageURL:
@@ -71,7 +71,7 @@ export const productList: IProduct[] = [
     imageURL:
       "https://images.unsplash.com/photo-1667893505867-c8bafac79dfc?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     price: "250000",
-    colors: ["#FF0032", "#2563eb", "#FF6E31"],
+    colors: ["#964B00", "#008000", "#8B8000"],
     category: {
       name: "Cars",
       imageURL:
@@ -115,9 +115,10 @@ export const colors: string[] = [
   "#393956",
   "#314247",
   "#ac9ed6",
-  "#3f3e26",
+  "#FF0032",
+  "#2563eb",
+  "#FF6E31",
   "#0f2759",
-  "#331a33",
   "#001104",
   "#a95add",
   "#354c7c",

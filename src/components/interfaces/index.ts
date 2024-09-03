@@ -21,7 +21,7 @@ export interface IFormInput {
 }
 
 export interface ICategoty {
-  id: string;
+  id?: string;
   name: string;
   imageURL: string;
 }

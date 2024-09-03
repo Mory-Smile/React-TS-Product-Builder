@@ -1,12 +1,11 @@
 import Modal from "./components/ui/Modal";
 import { productList, formInputsList, colors } from "./components/data";
 import ProductCard from "./components/ProductCard/ProductCard";
-import { FormEvent, useState } from "react";
+import { FormEvent, Fragment, useState } from "react";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
 import { ChangeEvent } from "react";
 import { IProduct } from "./components/interfaces";
-import { productValidation } from "./Validation";
 import CircleColor from "./components/CircleColor/CircleColor";
 import { categories } from "./components/data";
 
@@ -29,18 +28,11 @@ function App() {
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
   const [productToEdit, setProductToEdit] =
     useState<IProduct>(defaultProductObj);
-  /*     Validation State     */
-  // const [errors, setErrors] = useState({
-  //   title: "",
-  //   description: "",
-  //   imageURL: "",
-  //   price: "",
-  // });
+  const [productToEditIndex, setProductToEditIndex] = useState<number>(0);
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selected, setSelected] = useState(categories[0]);
-  console.log("Product To Edit", productToEdit);
 
   // ** Handlers
   const closeModal = () => setIsOpen(false);
@@ -67,24 +59,6 @@ function App() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    // const { title, description, imageURL, price } = product;
-
-    // const errors = productValidation({
-    //   title,
-    //   description,
-    //   imageURL,
-    //   price,
-    // });
-
-    // const hasErrorMsg =
-    //   Object.values(errors).some((value) => value === "") &&
-    //   Object.values(errors).every((value) => value === "");
-
-    // if (!hasErrorMsg) {
-    //   setErrors(errors);
-    //   return;
-    // }
-
     setProducts((prev) => [
       { ...product, id: uuid(), colors: tempColors, category: selected },
       ...prev,
@@ -97,9 +71,16 @@ function App() {
   const handleEditSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
+    const updatedProducts = [...products];
+    updatedProducts[productToEditIndex] = {
+      ...productToEdit,
+      colors: tempColors.concat(productToEdit.colors),
+    };
+    setProducts(updatedProducts);
+
     setProductToEdit(defaultProductObj);
     setTempColors([]);
-    closeModal();
+    closeEditModal();
   };
 
   const onCancleEdit = () => {
@@ -107,12 +88,14 @@ function App() {
   };
 
   // ** Renders
-  const renderProductList = products.map((product) => (
+  const renderProductList = products.map((product, index) => (
     <ProductCard
       key={product.id}
       product={product}
       setProductToEdit={setProductToEdit}
       openEditModal={openEditModal}
+      setProductToEditIndex={setProductToEditIndex}
+      index={index}
     />
   ));
 
@@ -140,6 +123,10 @@ function App() {
           setTempColors((prev) => prev.filter((item) => item !== color));
           return;
         }
+        if (productToEdit.colors.includes(color)) {
+          setTempColors((prev) => prev.filter((item) => item !== color));
+          return;
+        }
         setTempColors((prev) => [...prev, color]);
       }}
     />
@@ -148,7 +135,8 @@ function App() {
   const renderProductEdit = (
     id: string,
     label: string,
-    name: TProductNames
+    name: TProductNames,
+    type: string
   ) => {
     return (
       <div className="flex flex-col">
@@ -158,7 +146,7 @@ function App() {
         <Input
           id={id}
           name={name}
-          type={"text"}
+          type={type}
           onChange={handleEditChange}
           value={productToEdit[name]}
         />
@@ -222,35 +210,33 @@ function App() {
         <Modal isOpen={isEditOpen} closeModal={closeEditModal}>
           <h1 className="text-center font-medium pb-5">Edit CURRENT PRODUCT</h1>
           <form onSubmit={handleEditSubmit}>
-            {renderProductEdit("title", "Product Title", "title")}
+            {renderProductEdit("title", "Product Title", "title", "text")}
             {renderProductEdit(
               "description",
               "Product Description",
-              "description"
+              "description",
+              "text"
             )}
-            {renderProductEdit("imageURL", "Product Image URL", "imageURL")}
-            {renderProductEdit("price", "Product Price", "price")}
+            {renderProductEdit(
+              "imageURL",
+              "Product Image URL",
+              "imageURL",
+              "text"
+            )}
+            {renderProductEdit("price", "Product Price", "price", "number")}
 
-            {/* <Select selected={selected} setSelected={setSelected} />
-
+            <Select
+              selected={productToEdit.category}
+              setSelected={(value) =>
+                setProductToEdit({ ...productToEdit, category: value })
+              }
+            />
 
             <div className="flex items-center justify-center flex-wrap space-x-1 pb-3">
               {renderProductColors}
             </div>
             <div className="flex items-center justify-center flex-wrap space-x-1 pb-3">
-              {tempColors.map((color) => (
-                <span
-                  key={color}
-                  className={"rounded-md text-white p-1 mb-1 text-xs"}
-                  style={{ backgroundColor: color }}
-                >
-                  {color}
-                </span>
-              ))}
-            </div> */}
-
-            <div className="flex items-center justify-center flex-wrap space-x-1 pb-3">
-              {tempColors.map((color) => (
+              {tempColors.concat(productToEdit.colors).map((color) => (
                 <span
                   key={color}
                   className={"rounded-md text-white p-1 mb-1 text-xs"}
@@ -264,7 +250,9 @@ function App() {
             <div className="flex items-center space-x-3">
               <Button
                 className="bg-indigo-700 hover:bg-indigo-800 transition-colors text-white"
-                onClick={() => console.log("Product Added")}
+                onClick={() =>
+                  console.log(`Product ${productToEditIndex + 1} Edited`)
+                }
               >
                 Submit
               </Button>

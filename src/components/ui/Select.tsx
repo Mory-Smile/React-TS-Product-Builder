@@ -10,13 +10,13 @@ import { categories } from "../data";
 import { ICategoty } from "../interfaces";
 
 interface IProps {
-  selected: ICategoty;
+  selected: { name: string; imageURL: string };
   setSelected: (category: ICategoty) => void;
 }
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
+// function classNames(...classes: string[]) {
+//   return classes.filter(Boolean).join(" ");
+// }
 
 const Select = ({ selected, setSelected }: IProps) => {
   return (
