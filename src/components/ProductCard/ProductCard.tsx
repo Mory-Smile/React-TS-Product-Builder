@@ -1,4 +1,5 @@
 import { txtSlicer } from "../../utils/functions";
+import { numberToCommas } from "../../utils/functions";
 import Image from "../Image Component/Image";
 import { IProduct } from "../interfaces";
 import Button from "../ui/Button";
@@ -10,6 +11,7 @@ interface IProps {
   openEditModal: () => void;
   setProductToEditIndex: (value: number) => void;
   index: number;
+  openConfirmDeleteModal: () => void;
 }
 
 const ProductCard = ({
@@ -17,6 +19,7 @@ const ProductCard = ({
   setProductToEdit,
   openEditModal,
   setProductToEditIndex,
+  openConfirmDeleteModal,
   index,
 }: IProps) => {
   const { title, description, imageURL, price, colors, category } = product;
@@ -31,6 +34,11 @@ const ProductCard = ({
     setProductToEdit(product);
     openEditModal();
     setProductToEditIndex(index);
+  };
+
+  const handleRemove = () => {
+    setProductToEdit(product);
+    openConfirmDeleteModal();
   };
 
   return (
@@ -50,7 +58,7 @@ const ProductCard = ({
         </div>
 
         <div className="flex items-center justify-between">
-          <span className="text-lg">{`$${price}`}</span>
+          <span className="text-lg">{`$${numberToCommas(price)}`}</span>
           <Image
             imageURL={category.imageURL}
             alt={category.name}
@@ -62,10 +70,7 @@ const ProductCard = ({
           <Button className="bg-gray-600" width="w-full" onClick={handleEdit}>
             Edit
           </Button>
-          <Button
-            className="bg-red-700"
-            onClick={() => console.log("Delete Clicked")}
-          >
+          <Button className="bg-red-700" onClick={handleRemove}>
             Delete
           </Button>
         </div>

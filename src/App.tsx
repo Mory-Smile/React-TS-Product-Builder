@@ -1,7 +1,7 @@
 import Modal from "./components/ui/Modal";
 import { productList, formInputsList, colors } from "./components/data";
 import ProductCard from "./components/ProductCard/ProductCard";
-import { FormEvent, Fragment, useState } from "react";
+import { FormEvent, useState } from "react";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
 import { ChangeEvent } from "react";
@@ -12,6 +12,8 @@ import { categories } from "./components/data";
 import { v4 as uuid } from "uuid";
 import Select from "./components/ui/Select";
 import { TProductNames } from "./types";
+
+import toast, { Toaster } from "react-hot-toast";
 
 function App() {
   const defaultProductObj = {
@@ -32,6 +34,7 @@ function App() {
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
   const [selected, setSelected] = useState(categories[0]);
 
   // ** Handlers
@@ -66,6 +69,11 @@ function App() {
     closeModal();
     setProduct(defaultProductObj);
     setTempColors([]);
+    toast("SUCCESS✅, PRODUCT HAS BEEN ADDED", {
+      duration: 3000,
+      className: "bg-gray-600",
+      style: { backgroundColor: "", color: "white" },
+    });
   };
 
   const handleEditSubmit = (e: FormEvent<HTMLFormElement>): void => {
@@ -81,10 +89,40 @@ function App() {
     setProductToEdit(defaultProductObj);
     setTempColors([]);
     closeEditModal();
+    toast("SUCCESS✅, PRODUCT HAS BEEN UPDATED", {
+      duration: 3000,
+      className: "bg-gray-600",
+      style: { backgroundColor: "", color: "white" },
+    });
   };
 
   const onCancleEdit = () => {
     closeEditModal();
+  };
+
+  const onCancleDeleteModal = () => {
+    closeConfirmDeleteModal();
+  };
+
+  const openConfirmDeleteModal = () => {
+    setIsConfirmDeleteOpen(true);
+  };
+
+  const closeConfirmDeleteModal = () => {
+    setIsConfirmDeleteOpen(false);
+  };
+
+  const handleRemove = () => {
+    const filteredRemovedList = products.filter(
+      (product) => product.id !== productToEdit.id
+    );
+    setProducts(filteredRemovedList);
+    closeConfirmDeleteModal();
+    toast("SUCCESS✅, PRODUCT HAS BEEN DELETED", {
+      duration: 3000,
+      className: "bg-gray-600",
+      style: { backgroundColor: "", color: "white" },
+    });
   };
 
   // ** Renders
@@ -96,6 +134,7 @@ function App() {
       openEditModal={openEditModal}
       setProductToEditIndex={setProductToEditIndex}
       index={index}
+      openConfirmDeleteModal={openConfirmDeleteModal}
     />
   ));
 
@@ -158,7 +197,7 @@ function App() {
     <>
       <main className="container mx-auto">
         <Button
-          className="bg-indigo-700 hover:bg-indigo-800 transition-colors text-white"
+          className="bg-[linear-gradient(39deg,_#4fa7c6,_#2c67f2)] hover:bg-[linear-gradient(39deg,_#3a7f97,_#214aac)] transition-colors text-white h-16"
           onClick={openModal}
         >
           Add Product
@@ -210,20 +249,22 @@ function App() {
         <Modal isOpen={isEditOpen} closeModal={closeEditModal}>
           <h1 className="text-center font-medium pb-5">Edit CURRENT PRODUCT</h1>
           <form onSubmit={handleEditSubmit}>
-            {renderProductEdit("title", "Product Title", "title", "text")}
-            {renderProductEdit(
-              "description",
-              "Product Description",
-              "description",
-              "text"
-            )}
-            {renderProductEdit(
-              "imageURL",
-              "Product Image URL",
-              "imageURL",
-              "text"
-            )}
-            {renderProductEdit("price", "Product Price", "price", "number")}
+            <div className="pb-5">
+              {renderProductEdit("title", "Product Title", "title", "text")}
+              {renderProductEdit(
+                "description",
+                "Product Description",
+                "description",
+                "text"
+              )}
+              {renderProductEdit(
+                "imageURL",
+                "Product Image URL",
+                "imageURL",
+                "text"
+              )}
+              {renderProductEdit("price", "Product Price", "price", "number")}
+            </div>
 
             <Select
               selected={productToEdit.category}
@@ -266,6 +307,35 @@ function App() {
             </div>
           </form>
         </Modal>
+
+        {/* DELETE PRODUCT MODAL */}
+        <Modal
+          isOpen={isConfirmDeleteOpen}
+          closeModal={closeConfirmDeleteModal}
+        >
+          <h1 className="text-center font-medium pb-5">
+            DELETE CURRENT PRODUCT?
+          </h1>
+
+          <div className="flex items-center space-x-3">
+            <Button
+              className="bg-red-600 hover:bg-red-700 transition-colors text-white"
+              onClick={handleRemove}
+              type="button"
+            >
+              Delete
+            </Button>
+            <Button
+              className="bg-gray-600 hover:bg-gray-700 transition-colors text-white"
+              onClick={onCancleDeleteModal}
+              type="button"
+            >
+              Cancel
+            </Button>
+          </div>
+        </Modal>
+
+        <Toaster />
       </main>
     </>
   );
